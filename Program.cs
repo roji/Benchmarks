@@ -1,17 +1,12 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
-namespace Benchmark
+BenchmarkRunner.Run<Program>();
+
+public class Program
 {
-    public class Program
+    [Benchmark]
+    public int Foo()
     {
-        [Benchmark]
-        public int Foo()
-        {
-
-        }
-
-        static void Main(string[] args)
-            => BenchmarkRunner.Run<Program>();
     }
 }
