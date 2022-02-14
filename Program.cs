@@ -14,7 +14,8 @@ public class Benchmark
     public async Task Setup()
     {
         var builder = new DbContextOptionsBuilder<BlogContext>();
-        builder.UseNpgsql("Host=localhost;Username=test;Password=test");
+        builder.UseInMemoryDatabase("foo");
+        // builder.UseNpgsql("Host=localhost;Username=test;Password=test");
         _contextFactory = new PooledDbContextFactory<BlogContext>(builder.Options);
 
         using var ctx = _contextFactory.CreateDbContext();
@@ -23,11 +24,17 @@ public class Benchmark
     }
 
     [Benchmark]
-    public async Task Foo()
+    public async Task QueryAndTrack()
     {
         using var ctx = _contextFactory.CreateDbContext();
 
-        _ = await ctx.Blogs.ToListAsync();
+        var blog = await ctx.Blogs.SingleAsync();
+        unchecked
+        {
+            blog.Foo++;
+        }
+
+        await ctx.SaveChangesAsync();
     }
 }
 
@@ -36,10 +43,15 @@ public class BlogContext : DbContext
     public DbSet<Blog> Blogs { get; set; }
 
     public BlogContext(DbContextOptions options) : base(options) {}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Blog>().HasData(new Blog { Id = 1, Foo = 1 });
+    }
 }
 
 public class Blog
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public int Foo { get; set; }
 }

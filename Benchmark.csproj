@@ -7,7 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+<!--    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+<!--    <ProjectReference Include="/home/roji/projects/efcore.pg/src/EFCore.PG/EFCore.PG.csproj" />-->
+    <ProjectReference Include="/home/roji/projects/efcore/src/EFCore.InMemory/EFCore.InMemory.csproj" />
   </ItemGroup>
 
 </Project>
